@@ -17,7 +17,7 @@ inventory = [
     {
         "id": 2,
         "product_name": "Whole Grain Bread",
-        "brands": "Dave's Killer Bread",
+        "brands": "Bread",
         "barcode": "013093502006",
         "quantity": 5,
         "price": 5.49,
@@ -56,7 +56,7 @@ next_id = 6
 
 def find_item_id(id):
     for item in inventory:
-        if item['id'] == item.id:
+        if item['id'] == id:
             return item
     return None
 
@@ -66,7 +66,7 @@ def fetch_openfoodfacts_data(barcode):
         response = requests.get(url)
 
         if response.status_code == 200:
-            data = response.json
+            data = response.json()
 
             if data.get('status') == 1:
                 product = data.get('product', {})
@@ -86,7 +86,6 @@ def fetch_openfoodfacts_data(barcode):
 def home():
     return jsonify({
         "message": "Food Inventory Management API",
-        "version": "1.0",
         "endpoints": {
             "GET /inventory": "Fetch all inventory items",
             "GET /inventory/<id>": "Fetch a specific item",
@@ -191,3 +190,5 @@ def get_openfoodfacts_product(barcode):
     else:
         return jsonify({"error": "Product not found in OpenFoodFacts database"}), 404
     
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=8000)
